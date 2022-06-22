@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
         QMessageBox::critical(this, tr("Error"), tr("Files are missing! Please reinstall this application."));
         ui->button_flash->setEnabled(false);
     }
+    connect(optionsWindow, SIGNAL(returnPage(int, int)), this, SLOT(getReturnPage(int, int)));
 }
 
 MainWindow::~MainWindow()
@@ -24,30 +25,33 @@ MainWindow::~MainWindow()
     delete path_System;
     delete edbINFO;
     delete sbloaderINFO;
+    delete optionsWindow;
 }
 
 void MainWindow::doStage(int stage){
     if(stage == 1){
         ui->output->clear();
         addLine("Prepare to flash...");
+        addLine("OSLoader: PAGE " + QString::number(page_OSLoader));
+        addLine("System: PAGE " + QString::number(page_System));
         QStringList argu;
         argu.append("-f");
         argu.append(*path_OSLoader);
         openProcess(stage, QDir::currentPath() + "/sb_loader.exe", argu);
     }else{
         if(stage == 2){
-        addLine("Installing system...");
-        QStringList argu;
-        argu.append("-r");
-        argu.append("-s");
-        argu.append("-f");
-        argu.append(*path_OSLoader);
-        argu.append("1408");
-        argu.append("b");
-        argu.append("-f");
-        argu.append(*path_System);
-        argu.append("1984");
-        openProcess(stage, QDir::currentPath() + "/edb.exe", argu);
+            addLine("Installing system...");
+            QStringList argu;
+            argu.append("-r");
+            argu.append("-s");
+            argu.append("-f");
+            argu.append(*path_OSLoader);
+            argu.append(QString::number(page_OSLoader));
+            argu.append("b");
+            argu.append("-f");
+            argu.append(*path_System);
+            argu.append(QString::number(page_System));
+            openProcess(stage, QDir::currentPath() + "/edb.exe", argu);
         }
     }
 }
@@ -116,7 +120,7 @@ void MainWindow::on_button_flash_clicked()
         QMessageBox::warning(this, tr("Warning"), tr("File(s) unselected!"));
     }else{
         if(osloaderINFO.isFile() && systemINFO.isFile()){
-            if(QMessageBox::question(this, tr("Question"), tr("Are you sure you want to update your calculator?")) == QMessageBox::Yes){
+            if(QMessageBox::question(this, tr("Question"), tr("Are you sure you want to update your calculator?\n")) == QMessageBox::Yes){
                 ui->button_flash->setEnabled(false);
                 doStage(stage);
             }
@@ -124,5 +128,17 @@ void MainWindow::on_button_flash_clicked()
             QMessageBox::critical(this, tr("Error"), tr("File does not exist!"));
         }
     }
+}
+
+
+void MainWindow::on_button_Option_clicked()
+{
+    optionsWindow->setPage(page_OSLoader, page_System);
+    optionsWindow->show();
+}
+
+void MainWindow::getReturnPage(int OSLoader, int System){
+    page_OSLoader = OSLoader;
+    page_System = System;
 }
 
