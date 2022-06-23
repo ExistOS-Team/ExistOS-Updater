@@ -9,6 +9,7 @@
 #include <QFileInfo>
 
 #include <options.h>
+#include <about.h>
 
 constexpr auto VERSION = "ver 0.0.2";
 
@@ -43,6 +44,8 @@ private slots:
 
     void getReturnPage(int OSLoader, int System);
 
+    void on_button_About_clicked();
+
 private:
     Ui::MainWindow *ui;
     QProcess* p1 = new QProcess(this);
@@ -53,5 +56,7 @@ private:
     QFileInfo* sbloaderINFO = new QFileInfo(QDir::currentPath() + "/sb_loader.exe");
 
     Options* optionsWindow = new Options(this);
+    About* aboutWindow = new About(this);
+
 };
 #endif // MAINWINDOW_H

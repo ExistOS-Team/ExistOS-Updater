@@ -142,3 +142,9 @@ void MainWindow::getReturnPage(int OSLoader, int System){
     page_System = System;
 }
 
+
+void MainWindow::on_button_About_clicked()
+{
+    aboutWindow->show();
+}
+

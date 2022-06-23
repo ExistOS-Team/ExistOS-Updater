@@ -22,6 +22,9 @@ set(PROJECT_SOURCES
         options.h
         options.cpp
         options.ui
+        about.h
+        about.cpp
+        about.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
