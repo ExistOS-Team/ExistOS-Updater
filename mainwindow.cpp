@@ -26,6 +26,7 @@ MainWindow::~MainWindow()
     delete edbINFO;
     delete sbloaderINFO;
     delete optionsWindow;
+    delete aboutWindow;
 }
 
 void MainWindow::doStage(int stage){
